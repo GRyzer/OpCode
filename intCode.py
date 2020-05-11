@@ -21,52 +21,44 @@ class IntCode:
             if opcode == 1:
                 self.intCode_list[parameter3] = self.intCode_list[parameter1] + \
                     self.intCode_list[parameter2]
-                self.instruction_ptr + 4
 
             elif opcode == 2:
                 self.intCode_list[parameter3] = self.intCode_list[parameter1] * \
                     self.intCode_list[parameter2]
-                self.instruction_ptr + 4
 
             elif opcode == 3:
                 self.intCode_list[parameter3] = parameter1
-                self.instruction_ptr + 2
 
             elif opcode == 4:
                 print(self.intCode_list[parameter1])
-                self.instruction_ptr + 2
 
             elif opcode == 5:
                 if self.intCode_list[parameter1] != 0:
                     self.instruction_ptr.set_new_value(
                         self.intCode_list[parameter2])
-                else:
-                    self.instruction_ptr + 3
 
             elif opcode == 6:
                 if self.intCode_list[parameter1] == 0:
                     self.instruction_ptr.set_new_value(
                         self.intCode_list[parameter2])
-                else:
-                    self.instruction_ptr + 3
 
             elif opcode == 7:
                 if self.intCode_list[parameter1] < self.intCode_list[parameter2]:
                     self.intCode_list[parameter3] = 1
                 else:
                     self.intCode_list[parameter3] = 0
-                self.instruction_ptr + 4
 
             elif opcode == 8:
                 if self.intCode_list[parameter1] == self.intCode_list[parameter2]:
                     self.intCode_list[parameter3] = 1
                 else:
                     self.intCode_list[parameter3] = 0
-                self.instruction_ptr + 4
 
             else:
                 raise ValueError(
                     f"Unexpected Opcode: {current_opcode} appeared")
+
+            self.modify_instruction_pointer(opcode)
 
     def get_intCode_positions(self, opcode: str):
         int_code_positions = [int(opcode[-1])]
@@ -98,7 +90,15 @@ class IntCode:
         return int_code_positions
 
     def modify_instruction_pointer(self, opcode):
-        pass
+        if opcode in [1, 2, 7, 8]:
+            self.instruction_ptr + 4
+        elif opcode in [3, 4]:
+            self.instruction_ptr + 2
+        elif opcode in [5, 6]:
+            try:
+                self.instruction_ptr + 3
+            except ValueError:
+                pass
 
 
 if __name__ == "__main__":
