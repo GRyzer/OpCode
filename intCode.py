@@ -2,8 +2,8 @@ from InstructionPtr import InstructionPointer
 
 
 class IntCode:
-    def __init__(self, file_name):
-        self.intCode_list = IntCode.from_file(file_name)
+    def __init__(self):
+        self.intCode_list = None
         self.instruction_ptr = InstructionPointer(0)
 
     @classmethod
@@ -11,6 +11,9 @@ class IntCode:
         with open(file_name, "r") as f:
             storage = f.read().strip().split(',')
             return [int(element) for element in storage]
+    
+    def initialize_IntCode(self, file_name):
+        self.intCode_list = IntCode.from_file(file_name)
 
     def decrypt_int_code(self):
         while self.intCode_list[self.instruction_ptr()] != 99:
@@ -103,7 +106,8 @@ class IntCode:
 
 if __name__ == "__main__":
     try:
-        code = IntCode("file_with_input.txt")
+        code = IntCode()
+        code.initialize_IntCode("file_with_input.txt")
         code.decrypt_int_code()
     except ValueError as e:
         print(e)
